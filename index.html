@@ -214,7 +214,10 @@
               <div class="discord-symbol">◉</div>
               <div>
                 <strong>Dzaky Wijdan COMMUNITY</strong
-                ><small><i></i> 12.483 anggota</small>
+                ><small
+                  ><i></i>
+                  <span id="chat-connection">Chat web aktif</span></small
+                >
               </div>
               <span class="chat-menu">•••</span>
             </div>
@@ -251,6 +254,14 @@
               </div>
             </div>
             <form class="chat-input" id="chat-form">
+              <input
+                id="chat-name"
+                type="text"
+                placeholder="Nama"
+                maxlength="24"
+                autocomplete="nickname"
+                aria-label="Nama kamu"
+              />
               <input
                 id="chat-message"
                 type="text"
@@ -303,6 +314,7 @@
       </div>
     </footer>
     <div class="toast" id="toast">Alamat server berhasil disalin.</div>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="script.js"></script>
   </body>
 </html>

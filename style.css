@@ -710,6 +710,10 @@ h2 span {
   flex: 1;
   font: 11px "DM Sans";
 }
+.chat-input #chat-name {
+  flex: 0 0 105px;
+  border-right: 1px solid #3c3f47;
+}
 .chat-input button {
   background: var(--red);
   border: 0;
@@ -964,5 +968,8 @@ h2 span {
   }
   .footer-links {
     gap: 12px;
+  }
+  .chat-input #chat-name {
+    flex-basis: 80px;
   }
 }
