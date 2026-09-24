@@ -19,6 +19,32 @@ on public.messages for insert
 to anon, authenticated
 with check (true);
 
+create or replace function public.censor_chat_message()
+returns trigger
+language plpgsql
+as $$
+begin
+  new.author := regexp_replace(
+    new.author,
+    '\m(anjing|asu|bangsat|bajingan|goblok|tolol|idiot|kontol|memek|ngentot|tai|fuck|shit|bitch)\M',
+    '***',
+    'gi'
+  );
+  new.content := regexp_replace(
+    new.content,
+    '\m(anjing|asu|bangsat|bajingan|goblok|tolol|idiot|kontol|memek|ngentot|tai|fuck|shit|bitch)\M',
+    '***',
+    'gi'
+  );
+  return new;
+end;
+$$;
+
+drop trigger if exists censor_chat_message_before_insert on public.messages;
+create trigger censor_chat_message_before_insert
+before insert on public.messages
+for each row execute function public.censor_chat_message();
+
 do $$
 begin
   if not exists (

@@ -20,8 +20,32 @@ const messages = document.querySelector("#messages");
 const chatConnection = document.querySelector("#chat-connection");
 const savedName = localStorage.getItem("nr-chat-name");
 let supabaseClient = null;
+const blockedWords = [
+  "anjing",
+  "asu",
+  "bangsat",
+  "bajingan",
+  "goblok",
+  "tolol",
+  "idiot",
+  "kontol",
+  "memek",
+  "ngentot",
+  "tai",
+  "fuck",
+  "shit",
+  "bitch",
+];
+const blockedWordsPattern = new RegExp(
+  `\\b(${blockedWords.join("|")})\\b`,
+  "gi",
+);
 
 if (savedName) chatName.value = savedName;
+
+function censorText(value) {
+  return value.replace(blockedWordsPattern, "***");
+}
 
 serverIp.textContent = serverConfig.ip;
 document.querySelectorAll('a[href="https://discord.com"]').forEach((link) => {
@@ -42,18 +66,20 @@ copyButton.addEventListener("click", async () => {
 function addMessage({ author, content, time = "baru saja" }) {
   const message = document.createElement("div");
   message.className = "message";
-  const initials = author.slice(0, 2).toUpperCase();
+  const safeAuthor = censorText(author);
+  const safeContent = censorText(content);
+  const initials = safeAuthor.slice(0, 2).toUpperCase();
   message.innerHTML = `<div class="avatar avatar-blue">${initials}</div><div><strong></strong><time>${time}</time><p></p></div>`;
-  message.querySelector("strong").textContent = author;
-  message.querySelector("p").textContent = content;
+  message.querySelector("strong").textContent = safeAuthor;
+  message.querySelector("p").textContent = safeContent;
   messages.appendChild(message);
   messages.scrollTop = messages.scrollHeight;
 }
 
 chatForm.addEventListener("submit", (event) => {
   event.preventDefault();
-  const author = chatName.value.trim() || "visitor";
-  const text = chatMessage.value.trim();
+  const author = censorText(chatName.value.trim()) || "visitor";
+  const text = censorText(chatMessage.value.trim());
   if (!text) return;
   localStorage.setItem("nr-chat-name", author);
   if (supabaseClient) {
