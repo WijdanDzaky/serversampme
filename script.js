@@ -57,7 +57,16 @@ chatForm.addEventListener("submit", (event) => {
   if (!text) return;
   localStorage.setItem("nr-chat-name", author);
   if (supabaseClient) {
-    supabaseClient.from("messages").insert({ author, content: text });
+    supabaseClient
+      .from("messages")
+      .insert({ author, content: text })
+      .then(({ error }) => {
+        if (error) {
+          console.warn("Pesan gagal dikirim:", error);
+          chatConnection.textContent = "Gagal kirim - cek policy";
+          addMessage({ author, content: text });
+        }
+      });
   } else {
     addMessage({ author, content: text });
   }
@@ -66,7 +75,10 @@ chatForm.addEventListener("submit", (event) => {
 
 async function connectRealtimeChat() {
   const config = serverConfig.supabase;
-  if (!window.supabase || !config.url || !config.anonKey) return;
+  if (!window.supabase || !config.url || !config.anonKey) {
+    chatConnection.textContent = "Mode demo - isi Supabase";
+    return;
+  }
   try {
     supabaseClient = window.supabase.createClient(config.url, config.anonKey);
     const { data, error } = await supabaseClient
@@ -99,7 +111,7 @@ async function connectRealtimeChat() {
       .subscribe();
   } catch (error) {
     console.warn("Supabase chat belum terhubung:", error);
-    chatConnection.textContent = "Mode demo";
+    chatConnection.textContent = "Supabase belum siap";
   }
 }
 
