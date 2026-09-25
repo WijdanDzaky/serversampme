@@ -1,0 +1,22 @@
+untuk cek ID chat 
+
+select *
+from public.messages
+order by created_at desc;
+
+lihat ID + isi chat
+
+select id, author, content, created_at
+from public.messages
+order by created_at desc;
+
+
+
+hapus salah satu chat (menggunakan ID)
+
+delete from public.messages
+where id = 12;
+
+Hapus Semua chat
+
+delete from public.messages;
