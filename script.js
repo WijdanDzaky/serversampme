@@ -18,7 +18,7 @@ const chatName = document.querySelector("#chat-name");
 const chatMessage = document.querySelector("#chat-message");
 const messages = document.querySelector("#messages");
 const chatConnection = document.querySelector("#chat-connection");
-const savedName = localStorage.getItem("nr-chat-name");
+const savedName = localStorage.getItem("DZ-chat-name");
 let supabaseClient = null;
 const blockedWords = [
   "anjing",
@@ -81,7 +81,7 @@ chatForm.addEventListener("submit", (event) => {
   const author = censorText(chatName.value.trim()) || "visitor";
   const text = censorText(chatMessage.value.trim());
   if (!text) return;
-  localStorage.setItem("nr-chat-name", author);
+  localStorage.setItem("DZ-chat-name", author);
   if (supabaseClient) {
     supabaseClient
       .from("messages")
